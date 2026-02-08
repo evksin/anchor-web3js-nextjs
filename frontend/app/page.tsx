@@ -1,4 +1,5 @@
 import { CounterCard } from "@/components/counter/CounterCard";
+import { WalletStatus } from "@/components/counter/WalletStatus";
 
 export default function Home() {
   return (
@@ -12,6 +13,9 @@ export default function Home() {
         <p className="text-gray-400">
           A minimal dApp built with Anchor & Next.js
         </p>
+        <div className="mt-4">
+          <WalletStatus />
+        </div>
       </div>
 
       <div className="relative z-10">
