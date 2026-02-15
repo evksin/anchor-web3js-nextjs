@@ -187,8 +187,10 @@ export function CreateToken2022Card() {
       transaction.feePayer = payer;
       transaction.recentBlockhash = blockhash;
 
+      // Подписываем минт сами, чтобы не передавать signers в адаптер (избегаем ошибок в части адаптеров)
+      transaction.partialSign(mintKeypair);
+
       const signature = await wallet.sendTransaction(connection, transaction, {
-        signers: [mintKeypair],
         skipPreflight: true,
       });
 
@@ -203,11 +205,14 @@ export function CreateToken2022Card() {
       });
       toast.success("Токен создан и заминчен");
     } catch (err) {
+      if (typeof console !== "undefined" && console.error) {
+        console.error("[Create Token-2022]", err);
+      }
       const msg = errorMessage(err);
       const isFunds = /insufficient|insufficient funds|0x1/i.test(msg);
       const isIncludesError = /Cannot read properties of undefined \(reading 'includes'\)/i.test(msg);
       const displayMsg = isIncludesError
-        ? "Ошибка окружения кошелька или браузера. Обновите страницу, попробуйте другой браузер или переподключите кошелёк."
+        ? "Ошибка окружения кошелька или браузера. Обновите страницу, попробуйте другой браузер или переподключите кошелёк. Подробности в консоли (F12)."
         : isFunds
           ? `${msg} Приложение в Devnet — получите SOL на ${FAUCET_URL}`
           : msg;
