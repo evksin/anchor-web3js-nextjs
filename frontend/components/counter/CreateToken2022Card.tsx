@@ -197,7 +197,7 @@ export function CreateToken2022Card() {
         rpcEndpoint: connection.rpcEndpoint ?? DEVNET_RPC,
       };
 
-      const signature = await wallet.sendTransaction(connectionForSend, transaction, {
+      const signature = await wallet.sendTransaction(transaction, connectionForSend, {
         skipPreflight: true,
       });
 
