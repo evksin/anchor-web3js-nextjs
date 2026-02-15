@@ -3,6 +3,7 @@
 import React, { useCallback, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import {
+  Connection,
   Keypair,
   SystemProgram,
   Transaction,
@@ -190,12 +191,11 @@ export function CreateToken2022Card() {
       // Подписываем минт сами, чтобы не передавать signers в адаптер (избегаем ошибок в части адаптеров)
       transaction.partialSign(mintKeypair);
 
-      // Адаптер вызывает getChainForEndpoint(connection.rpcEndpoint) — нужна строка, не undefined
+      // Адаптер вызывает getChainForEndpoint(connection.rpcEndpoint) — передаём Connection с гарантированным rpcEndpoint
       const DEVNET_RPC = "https://api.devnet.solana.com";
-      const connectionForSend = {
-        ...connection,
-        rpcEndpoint: connection.rpcEndpoint ?? DEVNET_RPC,
-      };
+      const connectionForSend: Connection = connection.rpcEndpoint
+        ? connection
+        : new Connection(DEVNET_RPC);
 
       const signature = await wallet.sendTransaction(transaction, connectionForSend, {
         skipPreflight: true,
