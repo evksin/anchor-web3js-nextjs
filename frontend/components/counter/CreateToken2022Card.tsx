@@ -190,7 +190,14 @@ export function CreateToken2022Card() {
       // Подписываем минт сами, чтобы не передавать signers в адаптер (избегаем ошибок в части адаптеров)
       transaction.partialSign(mintKeypair);
 
-      const signature = await wallet.sendTransaction(connection, transaction, {
+      // Адаптер вызывает getChainForEndpoint(connection.rpcEndpoint) — нужна строка, не undefined
+      const DEVNET_RPC = "https://api.devnet.solana.com";
+      const connectionForSend = {
+        ...connection,
+        rpcEndpoint: connection.rpcEndpoint ?? DEVNET_RPC,
+      };
+
+      const signature = await wallet.sendTransaction(connectionForSend, transaction, {
         skipPreflight: true,
       });
 
