@@ -1,4 +1,5 @@
 import { CounterCard } from "@/components/counter/CounterCard";
+import { CreateToken2022Card } from "@/components/counter/CreateToken2022Card";
 import { WalletStatus } from "@/components/counter/WalletStatus";
 
 export default function Home() {
@@ -18,8 +19,9 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="relative z-10">
+      <div className="relative z-10 flex flex-col items-center gap-8">
         <CounterCard />
+        <CreateToken2022Card />
       </div>
 
       <footer className="mt-20 text-center text-sm text-gray-500 relative z-10">
