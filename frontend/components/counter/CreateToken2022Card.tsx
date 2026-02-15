@@ -204,13 +204,15 @@ export function CreateToken2022Card() {
       toast.success("Токен создан и заминчен");
     } catch (err) {
       const msg = errorMessage(err);
-      setError(msg);
       const isFunds = /insufficient|insufficient funds|0x1/i.test(msg);
-      toast.error(
-        isFunds
+      const isIncludesError = /Cannot read properties of undefined \(reading 'includes'\)/i.test(msg);
+      const displayMsg = isIncludesError
+        ? "Ошибка окружения кошелька или браузера. Обновите страницу, попробуйте другой браузер или переподключите кошелёк."
+        : isFunds
           ? `${msg} Приложение в Devnet — получите SOL на ${FAUCET_URL}`
-          : msg
-      );
+          : msg;
+      setError(displayMsg);
+      toast.error(displayMsg);
     } finally {
       setLoading(false);
     }

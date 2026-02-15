@@ -4,7 +4,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useConnection, useWallet } from "@solana/wallet-adapter-react";
 import { LAMPORTS_PER_SOL } from "@solana/web3.js";
 
-function getNetworkName(endpoint: string) {
+function getNetworkName(endpoint: string | undefined) {
+  if (endpoint == null || typeof endpoint !== "string") return "custom";
   const lower = endpoint.toLowerCase();
   if (lower.includes("devnet")) return "devnet";
   if (lower.includes("testnet")) return "testnet";
@@ -19,8 +20,8 @@ export function WalletStatus() {
   const [loading, setLoading] = useState(false);
 
   const networkName = useMemo(
-    () => getNetworkName(connection.rpcEndpoint),
-    [connection.rpcEndpoint]
+    () => getNetworkName(connection?.rpcEndpoint),
+    [connection?.rpcEndpoint]
   );
 
   useEffect(() => {
